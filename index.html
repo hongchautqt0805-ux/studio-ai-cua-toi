@@ -1,66 +1,107 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Studio Pro 2026</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-900 text-white p-6 flex items-center justify-center min-h-screen">
-    <div class="max-w-md w-full bg-slate-800 rounded-3xl p-8 shadow-xl border border-slate-700">
-        <h1 class="text-2xl font-bold text-center mb-6 text-blue-400 italic">AI CREATOR PRO</h1>
-        
-        <div class="space-y-4">
-            <textarea id="prompt" rows="4" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-sm outline-none focus:border-blue-500" placeholder="Nhập ý tưởng video..."></textarea>
-            
-            <button onclick="runAI()" id="btn" class="w-full py-4 bg-blue-600 rounded-xl font-bold hover:bg-blue-500 transition-all">BẮT ĐẦU SẢN XUẤT</button>
+import React from 'react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-            <div id="loading" class="hidden text-center text-xs text-blue-400 animate-pulse uppercase">Đang kết nối siêu máy tính Google...</div>
+const data = [
+  { name: 'Thứ 2', earnings: 400, views: 2400 },
+  { name: 'Thứ 3', earnings: 1200, views: 5600 },
+  { name: 'Thứ 4', earnings: 900, views: 3200 },
+  { name: 'Thứ 5', earnings: 2100, views: 8900 },
+  { name: 'Thứ 6', earnings: 1800, views: 7100 },
+  { name: 'Thứ 7', earnings: 3400, views: 12000 },
+  { name: 'Chủ Nhật', earnings: 4200, views: 15600 },
+];
 
-            <div id="result" class="hidden mt-4 p-4 bg-slate-900 rounded-xl border border-blue-900/50">
-                <p class="text-[10px] text-blue-500 font-bold mb-2 uppercase">Kịch bản từ Gemini:</p>
-                <div id="textOutput" class="text-sm text-slate-300 leading-relaxed"></div>
-            </div>
+const Analytics: React.FC = () => {
+  return (
+    <div className="space-y-8 animate-in fade-in duration-700">
+      <header className="flex justify-between items-end">
+        <div>
+          <h2 className="text-2xl font-bold">Thống kê & Kiếm tiền</h2>
+          <p className="text-slate-400">Theo dõi doanh thu từ các nội dung đã xuất bản.</p>
         </div>
+        <div className="text-right">
+          <p className="text-sm text-slate-500">Số dư hiện tại</p>
+          <p className="text-3xl font-bold text-green-400">$1,245.80</p>
+        </div>
+      </header>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {[
+          { label: 'Tổng lượt xem', val: '45.2K', change: '+12%', color: 'text-blue-400' },
+          { label: 'Tỷ lệ tương tác', val: '8.4%', change: '+2.1%', color: 'text-purple-400' },
+          { label: 'Bài viết SEO', val: '12', change: '+1', color: 'text-orange-400' },
+          { label: 'Video Xu hướng', val: '3', change: '+2', color: 'text-rose-400' },
+        ].map((stat, i) => (
+          <div key={i} className="glass p-5 rounded-2xl">
+            <p className="text-xs text-slate-500 font-bold uppercase mb-1">{stat.label}</p>
+            <div className="flex items-end justify-between">
+              <p className={`text-2xl font-bold ${stat.color}`}>{stat.val}</p>
+              <span className="text-[10px] bg-white/5 px-2 py-1 rounded text-green-400">{stat.change}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="glass p-6 rounded-3xl">
+        <h3 className="font-bold mb-6 flex items-center gap-2">
+          <span>📈</span> Biểu đồ doanh thu tuần này (USD)
+        </h3>
+        <div className="h-[300px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={data}>
+              <defs>
+                <linearGradient id="colorEarnings" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+              <XAxis dataKey="name" stroke="#64748b" fontSize={12} />
+              <YAxis stroke="#64748b" fontSize={12} />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '8px' }}
+                itemStyle={{ color: '#818cf8' }}
+              />
+              <Area type="monotone" dataKey="earnings" stroke="#6366f1" fillOpacity={1} fill="url(#colorEarnings)" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="glass rounded-3xl overflow-hidden">
+        <table className="w-full text-left">
+          <thead className="bg-slate-800/50">
+            <tr>
+              <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Tác phẩm</th>
+              <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Kênh</th>
+              <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Trạng thái</th>
+              <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Thu nhập</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-800">
+            {[
+              { name: 'Review iPhone 16 Pro', channel: 'Blog / Google Search', status: 'Đang SEO', income: '$45.00' },
+              { name: 'Cinematic Travel Video', channel: 'YouTube / TikTok', status: 'Xu hướng', income: '$120.50' },
+              { name: 'AI Branding Graphics', channel: 'Canva / Stock', status: 'Đã bán', income: '$12.00' },
+            ].map((row, i) => (
+              <tr key={i} className="hover:bg-slate-800/30 transition-colors">
+                <td className="px-6 py-4 text-sm font-medium">{row.name}</td>
+                <td className="px-6 py-4 text-sm text-slate-400">{row.channel}</td>
+                <td className="px-6 py-4">
+                  <span className="px-2 py-1 bg-indigo-500/10 text-indigo-400 text-[10px] rounded-full font-bold uppercase">
+                    {row.status}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-sm font-bold text-green-400">{row.income}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
+  );
+};
 
-    <script>
-        // API Key của bạn
-        const KEY = "AIzaSyCHOETmHolQhihQJS7DLGM5-qRLOVxLvgQ";
+export default Analytics;
 
-        async function runAI() {
-            const input = document.getElementById('prompt').value;
-            if(!input) return alert("Hãy nhập ý tưởng!");
 
-            document.getElementById('loading').classList.remove('hidden');
-            document.getElementById('result').classList.add('hidden');
-
-            try {
-                // SỬA LỖI: Dùng v1 và model gemini-pro (luôn khả dụng cho gói miễn phí)
-                const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${KEY}`;
-                
-                const resp = await fetch(url, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: "Hãy viết kịch bản chi tiết cho video TikTok: " + input }] }]
-                    })
-                });
-
-                const data = await resp.json();
-                
-                if(data.error) {
-                    alert("Lỗi Google: " + data.error.message);
-                } else {
-                    document.getElementById('textOutput').innerText = data.candidates[0].content.parts[0].text;
-                    document.getElementById('result').classList.remove('hidden');
-                }
-            } catch (e) {
-                alert("Lỗi kết nối: " + e.message);
-            } finally {
-                document.getElementById('loading').classList.add('hidden');
-            }
-        }
-    </script>
-</body>
-</html>
